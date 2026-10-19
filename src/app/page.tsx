@@ -3,6 +3,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 type Estado = "Operativo" | "Con falla" | "Mantenimiento";
@@ -338,6 +339,7 @@ export default function Home() {
                     <th className="p-4">Equipo</th>
                     <th className="p-4">Ubicación</th>
                     <th className="p-4">Estado</th>
+                    <th className="p-4">Acciones</th>
                   </tr>
                 </thead>
 
@@ -348,6 +350,16 @@ export default function Home() {
                       <td className="p-4">{equipo.nombre}</td>
                       <td className="p-4">{equipo.ubicacion}</td>
                       <td className="p-4">{equipo.estado}</td>
+                      
+<td className="p-4">
+  <Link
+    href={`/equipos/${equipo.id}`}
+    className="inline-block rounded-lg bg-blue-700 px-4 py-2 text-white hover:bg-blue-800"
+  >
+    Ver detalles
+  </Link>
+</td>
+
                     </tr>
                   ))}
                 </tbody>
