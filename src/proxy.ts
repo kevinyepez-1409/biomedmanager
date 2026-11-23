@@ -56,9 +56,5 @@ export async function proxy(request: NextRequest) {
 
 // Protect the inventory and equipment detail pages.
 export const config = {
-  matcher: [
-    "/",
-    "/equipos/:path*",
-    "/prueba-conexion/:path*",
-  ],
+  matcher: ["/", "/equipos/:path*"],
 };
