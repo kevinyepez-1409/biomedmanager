@@ -2,18 +2,26 @@ import { createServerClient } from "@supabase/ssr";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
-// Destino del enlace de confirmacion de correo.
-// La plantilla "Confirm signup" de Supabase debe apuntar a:
-//   {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email
-// Funciona aunque el correo se abra en otro navegador o dispositivo.
+// Destino del enlace de confirmacion de correo. Acepta dos formatos:
+//
+// 1. ?code=...  -> plantilla por defecto de Supabase (sin SMTP propio).
+//    El registro envia emailRedirectTo = <origen>/auth/confirm.
+//    Solo funciona en el MISMO navegador donde se hizo el registro,
+//    porque necesita el "code verifier" guardado en sus cookies.
+//
+// 2. ?token_hash=...&type=email -> plantilla personalizada (requiere SMTP):
+//    {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email
+//    Funciona aunque el correo se abra en otro navegador o dispositivo.
 export async function GET(request: NextRequest) {
-  const tokenHash = request.nextUrl.searchParams.get("token_hash");
-  const type = request.nextUrl.searchParams.get("type") as EmailOtpType | null;
+  const params = request.nextUrl.searchParams;
+  const code = params.get("code");
+  const tokenHash = params.get("token_hash");
+  const type = params.get("type") as EmailOtpType | null;
 
   const exito = NextResponse.redirect(new URL("/", request.url));
   const fallo = NextResponse.redirect(new URL("/auth/error", request.url));
 
-  if (!tokenHash || !type) {
+  if (!code && !(tokenHash && type)) {
     return fallo;
   }
 
@@ -39,10 +47,12 @@ export async function GET(request: NextRequest) {
     }
   );
 
-  const { error } = await supabase.auth.verifyOtp({
-    type,
-    token_hash: tokenHash,
-  });
+  const { error } = code
+    ? await supabase.auth.exchangeCodeForSession(code)
+    : await supabase.auth.verifyOtp({
+        type: type!,
+        token_hash: tokenHash!,
+      });
 
   return error ? fallo : exito;
 }

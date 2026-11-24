@@ -65,6 +65,10 @@ export default function RegistroPage() {
       const { data, error: authError } = await supabase.auth.signUp({
         email: correo,
         password,
+        options: {
+          // Must be listed in Supabase > Authentication > URL Configuration.
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        },
       });
 
       if (authError) {
@@ -119,8 +123,8 @@ export default function RegistroPage() {
               Te enviamos un correo a <strong>{correoEnviado}</strong>.
             </p>
             <p className="mt-2">
-              Abre el enlace del mensaje para activar tu cuenta. Si no lo ves,
-              revisa la carpeta de spam.
+              Abre el enlace del mensaje en este mismo navegador para activar
+              tu cuenta. Si no lo ves, revisa la carpeta de spam.
             </p>
           </div>
         ) : (
