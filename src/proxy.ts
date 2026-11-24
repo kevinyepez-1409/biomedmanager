@@ -35,8 +35,24 @@ export async function proxy(request: NextRequest) {
 
   // Verify the authentication token.
   const { data, error } = await supabase.auth.getClaims();
+  const autenticado = !error && Boolean(data?.claims);
 
-  if (error || !data?.claims) {
+  const rutaPublica = RUTAS_PUBLICAS.includes(request.nextUrl.pathname);
+
+  // Signed-in users do not need the login or sign-up pages.
+  if (rutaPublica) {
+    if (!autenticado) return response;
+
+    const redirectResponse = NextResponse.redirect(new URL("/", request.url));
+    response.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie);
+    });
+    redirectResponse.headers.set("Cache-Control", "private, no-store");
+
+    return redirectResponse;
+  }
+
+  if (!autenticado) {
     const redirectResponse = NextResponse.redirect(
       new URL("/login", request.url)
     );
@@ -54,7 +70,11 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
-// Protect the inventory and equipment detail pages.
+// Pages for visitors without a session.
+const RUTAS_PUBLICAS = ["/login", "/registro"];
+
+// Protect the inventory and equipment detail pages; the public pages
+// are included only to send signed-in users to the inventory.
 export const config = {
-  matcher: ["/", "/equipos/:path*"],
+  matcher: ["/", "/equipos/:path*", "/login", "/registro"],
 };

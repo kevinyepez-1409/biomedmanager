@@ -3,6 +3,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -31,7 +32,9 @@ export default function LoginPage() {
 
       if (authError) {
         setError(
-          "No se pudo iniciar sesion. Revisa tus credenciales."
+          authError.code === "email_not_confirmed"
+            ? "Debes confirmar tu correo antes de iniciar sesión. Revisa tu bandeja de entrada."
+            : "No se pudo iniciar sesión. Revisa tu correo y contraseña."
         );
         return;
       }
@@ -65,7 +68,7 @@ export default function LoginPage() {
         </h2>
 
         <p className="mb-6 text-sm text-slate-500">
-          Ingresa con tu cuenta autorizada.
+          Ingresa con tu correo y contraseña.
         </p>
 
         <form onSubmit={iniciarSesion} className="space-y-5">
@@ -109,6 +112,13 @@ export default function LoginPage() {
             {cargando ? "Verificando..." : "Ingresar"}
           </button>
         </form>
+
+        <p className="mt-6 text-center text-sm text-slate-600">
+          ¿No tienes cuenta?{" "}
+          <Link href="/registro" className="font-medium text-blue-700 hover:underline">
+            Regístrate
+          </Link>
+        </p>
 
         <p className="mt-8 text-center text-xs text-slate-400">
           BioMedManager - Prototipo academico
