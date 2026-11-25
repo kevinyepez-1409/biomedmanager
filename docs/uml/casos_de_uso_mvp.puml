@@ -1,0 +1,71 @@
+@startuml casos_de_uso_mvp
+' BioMedManager - Casos de uso del MVP FINAL (alcance acordado).
+' Usar en la presentacion SOLO cuando todos esten implementados y probados.
+' Nuevos respecto de casos_de_uso_actual.puml: UC7, UC8, UC12, UC13, UC14,
+' UC15, UC16, UC17, UC18; UC5 pasa a "panel de indicadores".
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam usecase {
+  BackgroundColor #FCE3CC
+  BorderColor #8A5A3B
+}
+skinparam actorBorderColor #8A5A3B
+skinparam packageStyle rectangle
+
+actor "Visitante" as Visitante
+actor "Responsable\ntécnico" as Tecnico
+actor "Supabase Auth\n(servicio de correo)" as Auth <<sistema>>
+
+rectangle "BioMedManager" {
+  usecase "Registrarse" as UC1
+  usecase "Confirmar correo\nelectrónico" as UC2
+  usecase "Iniciar sesión" as UC3
+  usecase "Cerrar sesión" as UC4
+  usecase "Consultar panel\nde indicadores" as UC5
+  usecase "Consultar\ninventario" as UC6
+  usecase "Buscar y filtrar\nequipos" as UC7
+  usecase "Exportar inventario\na Excel" as UC8
+  usecase "Registrar equipo" as UC9
+  usecase "Editar datos\ndel equipo" as UC10
+  usecase "Consultar ficha\ndel equipo" as UC11
+  usecase "Consultar historial\nde reportes" as UC12
+  usecase "Generar etiqueta QR" as UC13
+  usecase "Cambiar estado\ndel equipo" as UC14
+  usecase "Verificar fallas\npendientes" as UC15
+  usecase "Reportar falla\nu observación" as UC16
+  usecase "Marcar equipo\n«Con falla»" as UC17
+  usecase "Resolver reporte\ncon nota de cierre" as UC18
+}
+
+Visitante --> UC1
+Visitante --> UC2
+Tecnico --> UC3
+Tecnico --> UC4
+Tecnico --> UC5
+Tecnico --> UC6
+Tecnico --> UC9
+Tecnico --> UC10
+Tecnico --> UC11
+Tecnico --> UC14
+Tecnico --> UC16
+Tecnico --> UC18
+
+UC1 --> Auth : envía correo\nde confirmación
+UC3 --> Auth : valida\ncredenciales
+
+UC7 .> UC6 : <<extend>>
+UC8 .> UC6 : <<extend>>
+UC11 ..> UC12 : <<include>>
+UC13 .> UC11 : <<extend>>
+UC14 ..> UC15 : <<include>>
+UC17 .> UC16 : <<extend>>\n{si el tipo es Falla}
+
+note bottom of UC15
+  Regla de salud: un equipo con fallas
+  pendientes no puede pasar a «Operativo».
+  Se impone en PostgreSQL (trigger), no solo
+  en la interfaz.
+end note
+@enduml

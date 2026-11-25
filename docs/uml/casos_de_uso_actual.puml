@@ -1,0 +1,54 @@
+@startuml casos_de_uso_actual
+' BioMedManager - Casos de uso IMPLEMENTADOS y verificados (2026-11-25)
+' Solo incluye funcionalidades que existen hoy en el codigo.
+' Renderizar: https://www.plantuml.com/plantuml o extension PlantUML de VS Code.
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam usecase {
+  BackgroundColor #FCE3CC
+  BorderColor #8A5A3B
+}
+skinparam actorBorderColor #8A5A3B
+skinparam packageStyle rectangle
+
+actor "Visitante" as Visitante
+actor "Responsable\ntécnico" as Tecnico
+actor "Supabase Auth\n(servicio de correo)" as Auth <<sistema>>
+
+rectangle "BioMedManager" {
+  usecase "Registrarse" as UC1
+  usecase "Confirmar correo\nelectrónico" as UC2
+  usecase "Iniciar sesión" as UC3
+  usecase "Cerrar sesión" as UC4
+  usecase "Consultar panel\nde resumen" as UC5
+  usecase "Consultar\ninventario" as UC6
+  usecase "Registrar equipo" as UC7
+  usecase "Consultar ficha\ndel equipo" as UC8
+  usecase "Consultar historial\nde reportes" as UC9
+  usecase "Reportar falla\nu observación" as UC10
+}
+
+Visitante --> UC1
+Visitante --> UC2
+Tecnico --> UC3
+Tecnico --> UC4
+Tecnico --> UC5
+Tecnico --> UC6
+Tecnico --> UC7
+Tecnico --> UC8
+Tecnico --> UC10
+
+UC1 --> Auth : envía correo\nde confirmación
+UC3 --> Auth : valida\ncredenciales
+
+UC8 ..> UC9 : <<include>>
+
+note bottom of UC10
+  Los casos del Responsable técnico
+  requieren sesión iniciada.
+  Cada cuenta accede solo a su propio
+  inventario (RLS de PostgreSQL).
+end note
+@enduml
