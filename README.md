@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BioMedManager
 
-## Getting Started
+Aplicación web para llevar el **inventario de equipos biomédicos** y el **ciclo de vida de sus fallas**: qué equipos están fuera de servicio, por qué y desde cuándo, sin que ninguno con una falla abierta figure como disponible.
 
-First, run the development server:
+> Proyecto académico de Programación Avanzada, Ingeniería Biomédica, Yachay Tech (2026). Es un prototipo: **no es apto para uso clínico real**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Funcionalidades
+
+- **Registro e inicio de sesión** con confirmación de correo (Supabase Auth). Cada cuenta tiene su propio inventario.
+- **Panel de indicadores:** disponibilidad (% de equipos operativos), fallas pendientes, equipos fuera de servicio y **MTTR** (tiempo medio de reparación).
+- **Inventario** con búsqueda, filtro por estado, alta de equipos y lista de equipos que requieren atención.
+- **Ficha del equipo:** edición de datos, cambio de estado, reportes de falla u observación, resolución con nota de cierre e historial con tiempos.
+- **Regla de salud:** al reportar una falla, el equipo pasa a «Con falla» y **no puede volver a «Operativo» mientras tenga fallas pendientes**. La regla se impone en PostgreSQL (triggers y permisos), no solo en la interfaz.
+- **Exportar a Excel:** un archivo con tres hojas (Resumen, Inventario y Reportes).
+- **Etiqueta QR** imprimible por equipo: al escanearla se abre su ficha.
+
+## Arquitectura
+
+```text
+Navegador ──► Next.js 16 (React, TypeScript, Tailwind) ── alojado en Vercel
+                 │  proxy.ts: sesión y redirecciones
+                 ▼
+           API REST de Supabase (HTTPS)
+                 │
+                 ▼
+           PostgreSQL (Supabase)
+             ├─ equipos, reportes
+             ├─ RLS: cada cuenta solo ve y modifica lo suyo
+             └─ triggers: regla de fallas, fechas y cierres
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No hay un backend propio: la aplicación usa la API que Supabase genera, protegida por RLS. Las reglas de negocio están en la base de datos, de modo que no se pueden saltar llamando a la API desde la consola del navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Flujo de un reporte (pipeline de datos):
+formulario → validación en la UI → API de Supabase → RLS → trigger → tabla → consulta → panel y Excel.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Requisitos
 
-## Learn More
+- Node.js 24 o superior y npm
+- Una cuenta de Supabase (el plan gratuito es suficiente)
 
-To learn more about Next.js, take a look at the following resources:
+## Instalación (en otro equipo)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clona el repositorio e instala las dependencias:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```powershell
+   git clone <URL-del-repositorio>
+   cd biomedmanager
+   npm install
+   ```
 
-## Deploy on Vercel
+2. Crea un proyecto en Supabase. En **SQL Editor**, ejecuta en este orden:
+   1. `supabase/sql/000_esquema_actual.sql`: tablas, índices, permisos y RLS.
+   2. `supabase/sql/001_regla_fallas.sql`: regla de fallas.
+   3. `supabase/sql/900_pruebas_regla.sql` (opcional): pruebas automáticas. Necesitan al menos una cuenta registrada; con dos cuentas también se comprueba el aislamiento entre ellas.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. En **Authentication → URL Configuration**, configura la **Site URL** (`http://localhost:3000` en local) y agrega `http://localhost:3000/**` en **Redirect URLs**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Copia `.env.example` como `.env.local` y completa la URL y la *publishable key* de tu proyecto (**Project Settings → API**).
+
+5. Ejecuta la aplicación:
+
+   ```powershell
+   npm run dev
+   ```
+
+   Abre <http://localhost:3000>, regístrate e inicia sesión.
+
+### Comprobaciones
+
+```powershell
+npm run lint
+npm run build
+npm audit --omit=dev
+```
+
+## Modelo de datos
+
+| Tabla | Campos principales |
+| --- | --- |
+| `equipos` | `codigo` (único por cuenta, sin distinguir mayúsculas), `nombre`, `marca`, `modelo`, `ubicacion`, `estado` (Operativo / Con falla / Mantenimiento), `usuario_id`, `creado_en` |
+| `reportes` | `equipo_id`, `tipo` (Falla / Observación), `descripcion` (5-2000 caracteres), `estado_atencion` (Pendiente / Resuelto), `nota_cierre`, `resuelto_en`, `usuario_id`, `creado_en` |
+
+Los scripts de `supabase/sql/` son la fuente de verdad del esquema.
+
+## Estructura
+
+```text
+src/
+  app/                 páginas (panel, login, registro, ficha, etiqueta QR, confirmación)
+  components/          componentes de interfaz reutilizables
+  lib/                 tipos, indicadores, exportación a Excel, errores, cliente de Supabase
+  proxy.ts             protección de rutas y renovación de la sesión
+supabase/sql/          esquema, migraciones y pruebas de la base de datos
+docs/                  plan técnico, casos de uso (PlantUML/SVG/PNG) y pruebas con usuarios
+```
+
+## Limitaciones conocidas
+
+- Cada cuenta es un inventario individual: no hay inventario compartido ni roles (trabajo futuro).
+- No se pueden borrar equipos ni reportes: así se conserva el historial.
+- No hay recuperación de contraseña desde la app.
+- Sin SMTP propio, Supabase solo envía correos a los miembros del equipo del proyecto. Para usuarios externos hay que configurar un SMTP propio.
+- En correos institucionales, el filtro de seguridad puede abrir el enlace de confirmación antes que la persona. En ese caso basta con iniciar sesión.
