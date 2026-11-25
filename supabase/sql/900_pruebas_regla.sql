@@ -62,7 +62,7 @@ BEGIN
   -- 3/4. Con una falla pendiente no se puede marcar Operativo (llamada directa).
   BEGIN
     UPDATE public.equipos SET estado = 'Operativo' WHERE id = equipo;
-    res := res || '3|Falla pendiente: Operativo bloqueado|FALLO: se permitió';
+    res := res || '3|Falla pendiente: Operativo bloqueado|FALLO: se permitió'::text;
   EXCEPTION WHEN OTHERS THEN
     res := res || format('3|Falla pendiente: Operativo bloqueado|%s',
       CASE WHEN SQLERRM = 'EQUIPO_CON_FALLAS_PENDIENTES' THEN 'OK' ELSE 'FALLO: ' || SQLERRM END);
@@ -81,9 +81,9 @@ BEGIN
   -- 6. Resolver sin nota de cierre se rechaza.
   BEGIN
     UPDATE public.reportes SET estado_atencion = 'Resuelto' WHERE id = falla;
-    res := res || '6|Resolver sin nota: rechazado|FALLO: se permitió';
+    res := res || '6|Resolver sin nota: rechazado|FALLO: se permitió'::text;
   EXCEPTION WHEN check_violation THEN
-    res := res || '6|Resolver sin nota: rechazado|OK';
+    res := res || '6|Resolver sin nota: rechazado|OK'::text;
   WHEN OTHERS THEN
     res := res || format('6|Resolver sin nota: rechazado|FALLO: %s', SQLERRM);
   END;
@@ -106,7 +106,7 @@ BEGIN
   -- 8. Un reporte resuelto no se puede modificar.
   BEGIN
     UPDATE public.reportes SET nota_cierre = 'Texto cambiado después' WHERE id = falla;
-    res := res || '8|Reporte resuelto: no modificable|FALLO: se permitió';
+    res := res || '8|Reporte resuelto: no modificable|FALLO: se permitió'::text;
   EXCEPTION WHEN OTHERS THEN
     res := res || format('8|Reporte resuelto: no modificable|%s',
       CASE WHEN SQLERRM = 'REPORTE_YA_RESUELTO' THEN 'OK' ELSE 'FALLO: ' || SQLERRM END);
@@ -126,16 +126,16 @@ BEGIN
   -- 10. No se puede falsear la fecha de alta de un equipo.
   BEGIN
     UPDATE public.equipos SET creado_en = now() - interval '1 year' WHERE id = equipo;
-    res := res || '10|Cambiar creado_en: sin permiso|FALLO: se permitió';
+    res := res || '10|Cambiar creado_en: sin permiso|FALLO: se permitió'::text;
   EXCEPTION WHEN insufficient_privilege THEN
-    res := res || '10|Cambiar creado_en: sin permiso|OK';
+    res := res || '10|Cambiar creado_en: sin permiso|OK'::text;
   WHEN OTHERS THEN
     res := res || format('10|Cambiar creado_en: sin permiso|FALLO: %s', SQLERRM);
   END;
 
   -- 11-13. Aislamiento entre cuentas (RLS), actuando como la cuenta B.
   IF usuario_b IS NULL THEN
-    res := res || '11|Cuenta B: pruebas de RLS|OMITIDO: solo hay una cuenta';
+    res := res || '11|Cuenta B: pruebas de RLS|OMITIDO: solo hay una cuenta'::text;
   ELSE
     PERFORM set_config('request.jwt.claims', claims_b, true);
 
@@ -151,9 +151,9 @@ BEGIN
     BEGIN
       INSERT INTO public.reportes (equipo_id, tipo, descripcion)
       VALUES (equipo, 'Falla', 'Reporte de B sobre equipo de A');
-      res := res || '13|Cuenta B no reporta sobre equipo de A|FALLO: se permitió';
+      res := res || '13|Cuenta B no reporta sobre equipo de A|FALLO: se permitió'::text;
     EXCEPTION WHEN insufficient_privilege THEN
-      res := res || '13|Cuenta B no reporta sobre equipo de A|OK';
+      res := res || '13|Cuenta B no reporta sobre equipo de A|OK'::text;
     WHEN OTHERS THEN
       res := res || format('13|Cuenta B no reporta sobre equipo de A|FALLO: %s', SQLERRM);
     END;
