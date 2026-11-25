@@ -126,6 +126,10 @@ export default function RegistroPage() {
               Abre el enlace del mensaje en este mismo navegador para activar
               tu cuenta. Si no lo ves, revisa la carpeta de spam.
             </p>
+            <p className="mt-2">
+              Si el enlace no te deja entrar, tu cuenta puede estar ya
+              confirmada: inicia sesión con tu correo y contraseña.
+            </p>
           </div>
         ) : (
           <>

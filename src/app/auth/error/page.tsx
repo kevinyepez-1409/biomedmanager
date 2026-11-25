@@ -11,9 +11,11 @@ export default function ErrorConfirmacion() {
         </h2>
 
         <p className="mt-3 text-sm text-slate-600">
-          El enlace no es válido, ya se usó o expiró. Si ya confirmaste tu
-          cuenta, inicia sesión. Si no, vuelve a registrarte para recibir un
-          enlace nuevo.
+          El enlace no es válido, ya se usó o expiró. Algunos correos
+          institucionales revisan los enlaces automáticamente y eso puede
+          confirmar tu cuenta antes de que hagas clic: prueba primero a
+          iniciar sesión con tu correo y contraseña. Si no puedes entrar,
+          vuelve a registrarte para recibir un enlace nuevo.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
