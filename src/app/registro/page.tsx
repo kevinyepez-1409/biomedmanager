@@ -4,6 +4,9 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { MarcoAcceso } from "@/components/MarcoAcceso";
+import { Aviso } from "@/components/Aviso";
+import { botonPrimario, campo, etiqueta } from "@/components/estilos";
 
 const LONGITUD_MINIMA = 8;
 
@@ -101,113 +104,79 @@ export default function RegistroPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-100 p-6">
-      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-blue-800">BioMedManager</h1>
-          <p className="mt-2 text-sm text-slate-500">
-            Gestión de equipamiento biomédico
+    <MarcoAcceso
+      titulo="Crear cuenta"
+      subtitulo="Cada cuenta tiene su propio inventario de equipos."
+    >
+      {correoEnviado ? (
+        <Aviso tipo="exito">
+          <p>
+            Te enviamos un correo a <strong>{correoEnviado}</strong>.
           </p>
-        </div>
+          <p className="mt-2">
+            Abre el enlace del mensaje en este mismo navegador para activar tu cuenta. Si no lo ves,
+            revisa la carpeta de spam.
+          </p>
+          <p className="mt-2">
+            Si el enlace no te deja entrar, tu cuenta puede estar ya confirmada: inicia sesión con tu
+            correo y contraseña.
+          </p>
+        </Aviso>
+      ) : (
+        <form onSubmit={registrarse} className="space-y-5">
+          <label className={etiqueta}>
+            Correo electrónico
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              placeholder="correo@ejemplo.com"
+              className={campo}
+            />
+          </label>
 
-        <h2 className="mb-2 text-xl font-semibold text-slate-800">
-          Crear cuenta
-        </h2>
+          <label className={etiqueta}>
+            Contraseña
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={LONGITUD_MINIMA}
+              autoComplete="new-password"
+              placeholder={`Mínimo ${LONGITUD_MINIMA} caracteres`}
+              className={campo}
+            />
+          </label>
 
-        {correoEnviado ? (
-          <div
-            role="status"
-            className="rounded-lg bg-green-50 p-4 text-sm text-green-800"
-          >
-            <p>
-              Te enviamos un correo a <strong>{correoEnviado}</strong>.
-            </p>
-            <p className="mt-2">
-              Abre el enlace del mensaje en este mismo navegador para activar
-              tu cuenta. Si no lo ves, revisa la carpeta de spam.
-            </p>
-            <p className="mt-2">
-              Si el enlace no te deja entrar, tu cuenta puede estar ya
-              confirmada: inicia sesión con tu correo y contraseña.
-            </p>
-          </div>
-        ) : (
-          <>
-            <p className="mb-6 text-sm text-slate-500">
-              Cada cuenta tiene su propio inventario de equipos.
-            </p>
+          <label className={etiqueta}>
+            Repite la contraseña
+            <input
+              type="password"
+              value={confirmacion}
+              onChange={(e) => setConfirmacion(e.target.value)}
+              required
+              autoComplete="new-password"
+              className={campo}
+            />
+          </label>
 
-            <form onSubmit={registrarse} className="space-y-5">
-              <label className="block text-sm font-medium text-slate-700">
-                Correo electrónico
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                  placeholder="correo@ejemplo.com"
-                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600"
-                />
-              </label>
+          {error && <Aviso tipo="error">{error}</Aviso>}
 
-              <label className="block text-sm font-medium text-slate-700">
-                Contraseña
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={LONGITUD_MINIMA}
-                  autoComplete="new-password"
-                  placeholder={`Mínimo ${LONGITUD_MINIMA} caracteres`}
-                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600"
-                />
-              </label>
+          <button type="submit" disabled={cargando} className={`${botonPrimario} w-full py-3`}>
+            {cargando ? "Creando cuenta…" : "Crear cuenta"}
+          </button>
+        </form>
+      )}
 
-              <label className="block text-sm font-medium text-slate-700">
-                Repite la contraseña
-                <input
-                  type="password"
-                  value={confirmacion}
-                  onChange={(e) => setConfirmacion(e.target.value)}
-                  required
-                  autoComplete="new-password"
-                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600"
-                />
-              </label>
-
-              {error && (
-                <p
-                  role="alert"
-                  className="rounded-lg bg-red-50 p-3 text-sm text-red-700"
-                >
-                  {error}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={cargando}
-                className="w-full rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
-              >
-                {cargando ? "Creando cuenta..." : "Crear cuenta"}
-              </button>
-            </form>
-          </>
-        )}
-
-        <p className="mt-6 text-center text-sm text-slate-600">
-          ¿Ya tienes cuenta?{" "}
-          <Link href="/login" className="font-medium text-blue-700 hover:underline">
-            Inicia sesión
-          </Link>
-        </p>
-
-        <p className="mt-8 text-center text-xs text-slate-400">
-          BioMedManager - Prototipo académico
-        </p>
-      </div>
-    </main>
+      <p className="mt-8 text-center text-sm text-slate-600">
+        ¿Ya tienes cuenta?{" "}
+        <Link href="/login" className="font-semibold text-marca-700 hover:underline">
+          Inicia sesión
+        </Link>
+      </p>
+    </MarcoAcceso>
   );
 }

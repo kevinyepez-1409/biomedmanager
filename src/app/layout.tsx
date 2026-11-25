@@ -13,7 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BioMedManager",
+  title: {
+    default: "BioMedManager",
+    template: "%s · BioMedManager",
+  },
   description:
     "Inventario de equipos biomédicos y seguimiento de fallas (prototipo académico)",
 };
@@ -24,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

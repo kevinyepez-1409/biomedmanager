@@ -11,8 +11,6 @@ const AQUI = dirname(fileURLToPath(import.meta.url));
 
 const RX = 98;
 const RY = 27;
-const COL_A = 430;
-const COL_B = 735;
 
 const esc = (t) =>
   t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
