@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { MarcoAcceso } from "@/components/MarcoAcceso";
 import { Aviso } from "@/components/Aviso";
 import { botonPrimario, campo, etiqueta } from "@/components/estilos";
+import { destinoSeguro } from "@/lib/destino";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,7 +37,9 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/");
+      // Return to the page that required the login (e.g. a scanned QR label).
+      const next = new URLSearchParams(window.location.search).get("next");
+      router.push(destinoSeguro(next));
       router.refresh();
     } catch {
       setError("Error de conexión. Comprueba tu internet e inténtalo de nuevo.");
@@ -62,7 +65,12 @@ export default function LoginPage() {
         </label>
 
         <label className={etiqueta}>
-          Contraseña
+          <span className="flex items-center justify-between">
+            Contraseña
+            <Link href="/recuperar" className="text-xs font-medium text-marca-700 hover:underline">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </span>
           <input
             type="password"
             value={password}

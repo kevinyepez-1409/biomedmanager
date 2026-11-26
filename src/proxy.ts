@@ -1,6 +1,7 @@
 
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { destinoSeguro } from "@/lib/destino";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -37,44 +38,40 @@ export async function proxy(request: NextRequest) {
   const { data, error } = await supabase.auth.getClaims();
   const autenticado = !error && Boolean(data?.claims);
 
-  const rutaPublica = RUTAS_PUBLICAS.includes(request.nextUrl.pathname);
+  const { pathname, search } = request.nextUrl;
 
-  // Signed-in users do not need the login or sign-up pages.
-  if (rutaPublica) {
-    if (!autenticado) return response;
-
-    const redirectResponse = NextResponse.redirect(new URL("/", request.url));
+  // Redirect while keeping refreshed session cookies.
+  function redirigir(destino: URL) {
+    const redirectResponse = NextResponse.redirect(destino);
     response.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set(cookie);
     });
     redirectResponse.headers.set("Cache-Control", "private, no-store");
-
     return redirectResponse;
   }
 
+  // Signed-in users do not need the login or sign-up pages: send them to
+  // where they were going (e.g. the equipment page opened from a QR label).
+  if (RUTAS_PUBLICAS.includes(pathname)) {
+    if (!autenticado) return response;
+    const next = destinoSeguro(request.nextUrl.searchParams.get("next"));
+    return redirigir(new URL(next, request.url));
+  }
+
   if (!autenticado) {
-    const redirectResponse = NextResponse.redirect(
-      new URL("/login", request.url)
-    );
-
-    // Preserve refreshed cookies when redirecting.
-    response.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie);
-    });
-
-    redirectResponse.headers.set("Cache-Control", "private, no-store");
-
-    return redirectResponse;
+    // Remember the requested page so the login can return to it.
+    const login = new URL("/login", request.url);
+    if (pathname !== "/") login.searchParams.set("next", pathname + search);
+    return redirigir(login);
   }
 
   return response;
 }
 
 // Pages for visitors without a session.
-const RUTAS_PUBLICAS = ["/login", "/registro"];
+const RUTAS_PUBLICAS = ["/login", "/registro", "/recuperar"];
 
-// Protect the inventory and equipment detail pages; the public pages
-// are included only to send signed-in users to the inventory.
+// Protected pages, plus the public ones (only to send signed-in users on).
 export const config = {
-  matcher: ["/", "/equipos/:path*", "/login", "/registro"],
+  matcher: ["/", "/equipos/:path*", "/nueva-contrasena", "/login", "/registro", "/recuperar"],
 };
