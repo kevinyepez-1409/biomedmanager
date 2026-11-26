@@ -29,25 +29,27 @@ La versión a distancia de la prueba: cada persona recibe un mensaje, usa la app
 
 ---
 
-## 2. Formulario (Google Forms o Microsoft Forms)
+## 2. Formulario (Google Forms): solo preguntas de selección
 
 **Título:** Prueba de BioMedManager
 **Descripción:** Gracias por probar la app. No se evalúa a la persona, se evalúa la aplicación.
 
-| # | Pregunta | Tipo | Opciones |
+| # | Pregunta | Tipo en Google Forms | Opciones |
 |---|---|---|---|
-| 1 | Tu nombre o iniciales | Respuesta corta | — |
-| 2 | ¿Desde qué dispositivo la probaste? | Opción múltiple | Computadora · Celular |
-| 3 | ¿Tienes experiencia con equipos biomédicos o hiciste prácticas en un hospital? | Opción múltiple | Sí · No |
-| 4 | ¿Pudiste hacer cada tarea? | **Cuadrícula de opción múltiple** | Filas: 1 Crear cuenta y entrar · 2 Registrar MON-01 · 3 Segundo equipo · 4 Reportar la falla · 5 Intentar marcar Operativo · 6 Resolver la falla y dejarlo Operativo · 7 Descargar Excel · 8 Etiqueta QR. Columnas: Sí, sin problema · Sí, pero me costó · No pude · No lo intenté |
-| 5 | En la tarea 5, la app no te dejó marcar el equipo como Operativo. ¿Entendiste por qué? | Opción múltiple | Sí, entendí · Más o menos · No entendí |
-| 6 | ¿Te parece útil esa regla (no permitir «Operativo» con una falla pendiente)? | Opción múltiple | Sí · No · No estoy seguro |
-| 7 | ¿Qué fue lo más confuso o difícil? | Párrafo | — |
-| 8 | Del 1 al 5, ¿qué tan fácil fue usar la app? | Escala lineal 1–5 | 1 = muy difícil · 5 = muy fácil |
-| 9 | Solo si tienes experiencia: ¿cómo se lleva el inventario de equipos donde trabajaste o hiciste prácticas? | Párrafo (opcional) | — |
-| 10 | ¿Algo que agregarías o cambiarías? | Párrafo (opcional) | — |
+| 1 | ¿Desde qué dispositivo probaste la app? | Opción múltiple | Computadora · Celular · Ambos |
+| 2 | ¿Qué estudias o a qué te dedicas? | Opción múltiple | Ingeniería Biomédica · Otra ingeniería · Ciencias de la salud · Otra |
+| 3 | ¿Has trabajado o hecho prácticas con equipos médicos? | Opción múltiple | Sí · No |
+| 4 | ¿Pudiste hacer cada tarea? | Cuadrícula de varias opciones | Filas: Crear cuenta y entrar · Registrar el monitor MON-01 · Registrar un segundo equipo · Reportar la falla · Intentar marcarlo Operativo · Resolver la falla y dejarlo Operativo · Descargar el Excel · Usar la etiqueta QR. Columnas: Lo logré fácil · Lo logré, pero me costó · No pude · No lo intenté |
+| 5 | ¿Entendiste por qué la app no te dejó marcar el equipo como Operativo? | Opción múltiple | Sí · Más o menos · No |
+| 6 | ¿Te parece útil esa regla? | Opción múltiple | Sí · No · No estoy seguro |
+| 7 | ¿Qué fue lo más difícil? (puedes marcar varias) | Casillas de verificación | Registrarme o confirmar el correo · Registrar un equipo · Reportar la falla · Resolver la falla · Cambiar el estado del equipo · Descargar el Excel · Usar la etiqueta QR · Nada, todo fue fácil |
+| 8 | ¿Qué tan fácil fue usar la app? | Escala lineal 1–5 | 1 = muy difícil · 5 = muy fácil |
+| 9 | ¿Recomendarías BioMedManager a quien gestiona equipos médicos? | Opción múltiple | Sí · Tal vez · No |
+| 10 | Comentario (opcional) | Respuesta corta, no obligatoria | — |
 
----
+Las preguntas 1 a 9 se marcan como **obligatorias**.
+
+**Truco:** para crear varias opciones de una vez, copia la lista de opciones (una por línea) y pégala en el campo «Opción 1». Google Forms crea una opción por cada línea.
 
 ## 3. Después de cada ronda
 
