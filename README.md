@@ -103,5 +103,6 @@ docs/                  plan técnico, casos de uso (PlantUML/SVG/PNG) y pruebas 
 - Cada cuenta es un inventario individual: no hay inventario compartido ni roles (trabajo futuro).
 - No se pueden borrar equipos ni reportes: así se conserva el historial.
 - No hay recuperación de contraseña desde la app.
-- Sin SMTP propio, Supabase solo envía correos a los miembros del equipo del proyecto. Para usuarios externos hay que configurar un SMTP propio.
+- Los correos de confirmación salen por un SMTP de Gmail con contraseña de aplicación: es suficiente para pruebas, pero no para envíos masivos. Sin SMTP propio, Supabase solo envía a los miembros del equipo del proyecto.
+- La plantilla «Confirm signup» de Supabase debe apuntar a `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email`. Así el enlace funciona aunque se abra en otro dispositivo.
 - En correos institucionales, el filtro de seguridad puede abrir el enlace de confirmación antes que la persona. En ese caso basta con iniciar sesión.
