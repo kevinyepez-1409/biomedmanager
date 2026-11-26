@@ -387,17 +387,30 @@ function CambioEstado({
         {opciones.map((o) => {
           const actual = equipo.estado === o.estado;
           const bloqueado = o.estado === "Operativo" && fallasPendientes > 0;
+          if (actual) {
+            // Estado vigente: se muestra como opcion seleccionada, no como boton.
+            return (
+              <div
+                key={o.estado}
+                aria-current="true"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-marca-500 bg-marca-50 px-4 py-2 text-sm font-semibold text-marca-800"
+              >
+                <Icono nombre="check" className="h-4 w-4" />
+                Estado actual: {o.estado}
+              </div>
+            );
+          }
           return (
             <button
               key={o.estado}
               type="button"
               onClick={() => cambiar(o.estado)}
-              disabled={actual || guardando !== null}
+              disabled={guardando !== null}
               title={bloqueado ? "Resuelve las fallas pendientes primero" : undefined}
-              className={`${actual ? botonPrimario : botonSecundario} ${bloqueado && !actual ? "opacity-70" : ""}`}
+              className={`${botonSecundario} ${bloqueado ? "opacity-70" : ""}`}
             >
               <Icono nombre={o.icono} className="h-4 w-4" />
-              {actual ? o.estado : guardando === o.estado ? "Guardando…" : o.texto}
+              {guardando === o.estado ? "Guardando…" : o.texto}
             </button>
           );
         })}
