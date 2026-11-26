@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   },
   description:
     "Inventario de equipos biomédicos y seguimiento de fallas (prototipo académico)",
+  applicationName: "BioMedManager",
+  appleWebApp: { capable: true, title: "BioMed", statusBarStyle: "default" },
+};
+
+// Color de la barra del navegador / de la app instalada.
+export const viewport: Viewport = {
+  themeColor: "#156d74",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

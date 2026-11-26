@@ -44,3 +44,17 @@ export const LONGITUD_TEXTO = { min: 5, max: 2000 } as const;
 export function esFallaPendiente(r: Pick<Reporte, "tipo" | "estado_atencion">) {
   return r.tipo === "Falla" && r.estado_atencion === "Pendiente";
 }
+
+// Trazabilidad (supabase/sql/002): cada cambio de estado de un equipo.
+export type OrigenCambio = "Alta del equipo" | "Falla reportada" | "Cambio manual" | "Inicio del historial";
+
+export type CambioEstado = {
+  id: string;
+  equipo_id: string;
+  estado_anterior: EstadoEquipo | null;
+  estado_nuevo: EstadoEquipo;
+  origen: OrigenCambio;
+  creado_en: string;
+};
+
+export const COLUMNAS_HISTORIAL = "id,equipo_id,estado_anterior,estado_nuevo,origen,creado_en";

@@ -163,6 +163,9 @@ BEGIN
   EXECUTE 'RESET ROLE';
   PERFORM set_config('request.jwt.claims', '', true);
   DELETE FROM public.reportes WHERE equipo_id = equipo;
+  IF to_regclass('public.historial_estados') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.historial_estados WHERE equipo_id = $1' USING equipo;
+  END IF;
   DELETE FROM public.equipos WHERE id = equipo;
 
   INSERT INTO resultados_pruebas (n, caso, resultado)

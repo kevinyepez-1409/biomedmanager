@@ -4,7 +4,7 @@
 import type { Cell, CellObject, Row, Sheet } from "write-excel-file/browser";
 import { calcularIndicadores, pendientesPorEquipo } from "./indicadores";
 import { duracion } from "./formato";
-import type { Equipo, Reporte } from "./tipos";
+import type { CambioEstado, Equipo, Reporte } from "./tipos";
 
 const FORMATO_FECHA = "dd/mm/yyyy hh:mm";
 const AZUL = "#0F4C5C";
@@ -31,7 +31,11 @@ function fechaCelda(iso: string | null): Cell {
   return iso ? { value: new Date(iso), type: Date, format: FORMATO_FECHA } : null;
 }
 
-export async function exportarInventarioExcel(equipos: Equipo[], reportes: Reporte[]) {
+export async function exportarInventarioExcel(
+  equipos: Equipo[],
+  reportes: Reporte[],
+  cambios: CambioEstado[] = []
+) {
   const { default: writeXlsxFile } = await import("write-excel-file/browser");
 
   const pendientes = pendientesPorEquipo(reportes);
@@ -117,6 +121,24 @@ export async function exportarInventarioExcel(equipos: Equipo[], reportes: Repor
       }),
   ];
 
+  // Hoja 4: trazabilidad de los cambios de estado.
+  const trazabilidad: Row[] = [
+    encabezado(["Fecha", "Código equipo", "Equipo", "Estado anterior", "Estado nuevo", "Origen"]),
+    ...[...cambios]
+      .sort((a, b) => b.creado_en.localeCompare(a.creado_en))
+      .map((c): Row => {
+        const equipo = porId.get(c.equipo_id);
+        return [
+          fechaCelda(c.creado_en),
+          texto(equipo?.codigo, { format: "@" }),
+          texto(equipo?.nombre),
+          texto(c.estado_anterior ?? "—"),
+          texto(c.estado_nuevo),
+          texto(c.origen),
+        ];
+      }),
+  ];
+
   const hojas: Sheet<Blob>[] = [
     { sheet: "Resumen", data: resumen, columns: [{ width: 36 }, { width: 22 }] },
     {
@@ -130,6 +152,12 @@ export async function exportarInventarioExcel(equipos: Equipo[], reportes: Repor
       data: historial,
       stickyRowsCount: 1,
       columns: [14, 24, 12, 48, 12, 18, 18, 14, 40].map((width) => ({ width })),
+    },
+    {
+      sheet: "Cambios de estado",
+      data: trazabilidad,
+      stickyRowsCount: 1,
+      columns: [18, 14, 28, 16, 16, 24].map((width) => ({ width })),
     },
   ];
 

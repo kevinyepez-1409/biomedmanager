@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { EncabezadoApp } from "@/components/EncabezadoApp";
 import { EstadoBadge } from "@/components/EstadoBadge";
 import { Indicador } from "@/components/Indicador";
+import { GraficosPanel } from "@/components/GraficosPanel";
 import { Aviso } from "@/components/Aviso";
 import { Icono } from "@/components/Icono";
 import { botonPrimario, botonSecundario, campo, etiqueta, tarjeta } from "@/components/estilos";
@@ -15,10 +16,12 @@ import { mensajeDeError } from "@/lib/errores";
 import { desde, duracion } from "@/lib/formato";
 import {
   COLUMNAS_EQUIPO,
+  COLUMNAS_HISTORIAL,
   COLUMNAS_REPORTE,
   ESTADOS_ELEGIBLES,
   ESTADOS_EQUIPO,
   esFallaPendiente,
+  type CambioEstado,
   type Equipo,
   type EstadoEquipo,
   type Reporte,
@@ -32,6 +35,7 @@ export default function Panel() {
   const [correo, setCorreo] = useState<string>();
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [reportes, setReportes] = useState<Reporte[]>([]);
+  const [cambios, setCambios] = useState<CambioEstado[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -55,9 +59,10 @@ export default function Panel() {
         }
         setCorreo(auth.user.email ?? undefined);
 
-        const [eq, rep] = await Promise.all([
+        const [eq, rep, cam] = await Promise.all([
           supabase.from("equipos").select(COLUMNAS_EQUIPO).order("creado_en", { ascending: false }),
           supabase.from("reportes").select(COLUMNAS_REPORTE).order("creado_en", { ascending: false }),
+          supabase.from("historial_estados").select(COLUMNAS_HISTORIAL),
         ]);
         if (!activo) return;
 
@@ -68,6 +73,8 @@ export default function Panel() {
 
         setEquipos((eq.data ?? []) as Equipo[]);
         setReportes((rep.data ?? []) as Reporte[]);
+        // Si la migracion 002 aun no existe, el panel funciona sin historial.
+        setCambios((cam.data ?? []) as CambioEstado[]);
       } catch {
         if (activo) setError("No se pudo conectar con el servidor. Revisa tu internet.");
       } finally {
@@ -119,7 +126,7 @@ export default function Panel() {
     setError("");
     try {
       const { exportarInventarioExcel } = await import("@/lib/exportar");
-      await exportarInventarioExcel(equipos, reportes);
+      await exportarInventarioExcel(equipos, reportes, cambios);
     } catch {
       setError("No se pudo generar el archivo Excel. Inténtalo de nuevo.");
     } finally {
@@ -229,6 +236,8 @@ export default function Panel() {
                 }
               />
             </section>
+
+            {equipos.length > 0 && <GraficosPanel equipos={equipos} reportes={reportes} />}
 
             {atencion.length > 0 && (
               <section className={`${tarjeta} mt-6 border-red-200`}>

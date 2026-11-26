@@ -13,9 +13,11 @@ import { mensajeDeError } from "@/lib/errores";
 import { duracion, fecha, fechaHora } from "@/lib/formato";
 import {
   COLUMNAS_EQUIPO,
+  COLUMNAS_HISTORIAL,
   COLUMNAS_REPORTE,
   LONGITUD_TEXTO,
   esFallaPendiente,
+  type CambioEstado as Cambio,
   type Equipo,
   type EstadoEquipo,
   type Reporte,
@@ -31,14 +33,32 @@ export default function FichaEquipo() {
   const [correo, setCorreo] = useState<string>();
   const [equipo, setEquipo] = useState<Equipo | null>(null);
   const [reportes, setReportes] = useState<Reporte[]>([]);
+  const [cambios, setCambios] = useState<Cambio[]>([]);
   const [cargando, setCargando] = useState(true);
   const [avisos, setAvisos] = useState<Avisos>({});
   const [editando, setEditando] = useState(false);
 
+  // Trazabilidad: la escribe la base de datos al cambiar el estado.
+  const consultarCambios = useCallback(
+    () =>
+      createClient()
+        .from("historial_estados")
+        .select(COLUMNAS_HISTORIAL)
+        .eq("equipo_id", id)
+        .order("creado_en", { ascending: false }),
+    [id]
+  );
+
+  const recargarCambios = useCallback(async () => {
+    const { data } = await consultarCambios();
+    if (data) setCambios(data as Cambio[]);
+  }, [consultarCambios]);
+
   const recargarEquipo = useCallback(async () => {
     const { data } = await createClient().from("equipos").select(COLUMNAS_EQUIPO).eq("id", id).single();
     if (data) setEquipo(data as Equipo);
-  }, [id]);
+    await recargarCambios();
+  }, [id, recargarCambios]);
 
   useEffect(() => {
     let activo = true;
@@ -54,13 +74,14 @@ export default function FichaEquipo() {
         }
         setCorreo(auth.user.email ?? undefined);
 
-        const [eq, rep] = await Promise.all([
+        const [eq, rep, cam] = await Promise.all([
           supabase.from("equipos").select(COLUMNAS_EQUIPO).eq("id", id).single(),
           supabase
             .from("reportes")
             .select(COLUMNAS_REPORTE)
             .eq("equipo_id", id)
             .order("creado_en", { ascending: false }),
+          consultarCambios(),
         ]);
         if (!activo) return;
 
@@ -70,6 +91,7 @@ export default function FichaEquipo() {
         }
         setEquipo(eq.data as Equipo);
         setReportes((rep.data ?? []) as Reporte[]);
+        setCambios((cam.data ?? []) as Cambio[]);
       } catch {
         if (activo) setAvisos({ error: "No se pudo conectar con el servidor. Revisa tu internet." });
       } finally {
@@ -81,7 +103,7 @@ export default function FichaEquipo() {
     return () => {
       activo = false;
     };
-  }, [id, router]);
+  }, [id, router, consultarCambios]);
 
   const fallasPendientes = useMemo(() => reportes.filter(esFallaPendiente).length, [reportes]);
 
@@ -196,6 +218,7 @@ export default function FichaEquipo() {
                   fallasPendientes={fallasPendientes}
                   onCambio={(e) => {
                     setEquipo(e);
+                    recargarCambios();
                     setAvisos({ exito: `Estado actualizado a «${e.estado}».` });
                   }}
                   onError={(error) => setAvisos({ error })}
@@ -214,6 +237,8 @@ export default function FichaEquipo() {
                     });
                   }}
                 />
+
+                <Trazabilidad cambios={cambios} />
               </div>
 
               <section className={tarjeta}>
@@ -255,6 +280,53 @@ export default function FichaEquipo() {
         )}
       </main>
     </div>
+  );
+}
+
+const ORIGEN_TEXTO: Record<Cambio["origen"], string> = {
+  "Alta del equipo": "Alta del equipo",
+  "Falla reportada": "Automático: falla reportada",
+  "Cambio manual": "Cambio manual",
+  "Inicio del historial": "Estado al iniciar el historial",
+};
+
+function Trazabilidad({ cambios }: { cambios: Cambio[] }) {
+  return (
+    <section className={`${tarjeta} p-5`}>
+      <h2 className="font-semibold text-slate-900">Trazabilidad de estados</h2>
+      <p className="mt-0.5 text-xs text-slate-500">
+        Registro automático de cada cambio. No se puede editar.
+      </p>
+
+      {cambios.length === 0 ? (
+        <p className="mt-4 text-sm text-slate-500">Sin cambios registrados.</p>
+      ) : (
+        <ol className="mt-4 space-y-3 border-l-2 border-slate-100 pl-4">
+          {cambios.map((c) => (
+            <li key={c.id} className="relative">
+              <span
+                aria-hidden="true"
+                className="absolute -left-[1.3rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-marca-500"
+              />
+              <div className="flex flex-wrap items-center gap-1.5 text-sm">
+                {c.estado_anterior && (
+                  <>
+                    <EstadoBadge estado={c.estado_anterior} />
+                    <span className="text-slate-400" aria-label="pasó a">
+                      →
+                    </span>
+                  </>
+                )}
+                <EstadoBadge estado={c.estado_nuevo} />
+              </div>
+              <p className="mt-1 text-xs text-slate-500">
+                {ORIGEN_TEXTO[c.origen]} · {fechaHora(c.creado_en)}
+              </p>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
   );
 }
 
