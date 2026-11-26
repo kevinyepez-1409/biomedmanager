@@ -4,6 +4,9 @@ Aplicación web para llevar el **inventario de equipos biomédicos** y el **cicl
 
 > Proyecto académico de Programación Avanzada, Ingeniería Biomédica, Yachay Tech (2026). Es un prototipo: **no es apto para uso clínico real**.
 
+**Aplicación publicada:** <https://biomedmanager.vercel.app>
+**Código fuente:** <https://github.com/kevinyepez-1409/biomedmanager>
+
 ## Funcionalidades
 
 - **Registro e inicio de sesión** con confirmación de correo (Supabase Auth). Cada cuenta tiene su propio inventario.
