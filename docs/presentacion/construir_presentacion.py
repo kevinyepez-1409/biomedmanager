@@ -274,7 +274,7 @@ rellenar(
         subtitulo("Herramientas de IA usadas y para qué"),
         v("Herramientas:", " Claude (chat) y Claude Code (agente que trabaja sobre el repositorio)."),
         v("Usos:", " revisión crítica del proyecto y del Canvas, auditoría de seguridad (RLS), código TypeScript y SQL, depuración (correo SMTP, compilación), diagramas UML y documentación."),
-        v("Porcentaje aproximado de código generado con IA:", " más del 75 %, revisado, probado y aprobado por el autor en cada etapa."),
+        v("Porcentaje aproximado de código generado con IA:", " alrededor del 70 %, revisado, probado y aprobado por el autor en cada etapa."),
         v("Ejemplo:", " «Evalúa críticamente el proyecto y propón rutas A/B/C; no escribas código todavía». Resultado: el diagnóstico y la ruta «ciclo de falla cerrado», que hoy es la regla de salud de la app."),
         v("¿La app usa IA internamente?", " No. No llama a ninguna API de IA; sus reglas son deterministas y viven en PostgreSQL."),
     ],

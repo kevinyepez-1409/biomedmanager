@@ -42,7 +42,7 @@ Duración estimada: **8 a 10 minutos**, más 20 s del anuncio inicial, unos 50 s
 
 > Sobre el uso de IA, quiero ser transparente. Usé **Claude** para la revisión crítica del proyecto y del Canvas, y **Claude Code** como asistente que trabaja directamente sobre el repositorio: auditó la seguridad, generó gran parte del código TypeScript y SQL, ayudó a depurar errores, por ejemplo la configuración del correo, e hizo los diagramas y la documentación.
 >
-> Calculo que **más del 75 % del código** se generó con IA, pero cada etapa la revisé, la probé y la aprobé yo. Un ejemplo de prompt fue pedirle que evaluara críticamente el proyecto antes de programar. De ahí salió la idea de cerrar el ciclo de cada falla, que hoy es la regla central de la app.
+> Calculo que **alrededor del 70 % del código** se generó con IA. La configuración inicial del proyecto la hice yo, y cada etapa posterior la revisé, la probé y la aprobé. Un ejemplo de prompt fue pedirle que evaluara críticamente el proyecto antes de programar. De ahí salió la idea de cerrar el ciclo de cada falla, que hoy es la regla central de la app.
 >
 > Y la respuesta a la última pregunta: **la app no usa IA internamente**. Sus reglas son deterministas y están en la base de datos.
 
