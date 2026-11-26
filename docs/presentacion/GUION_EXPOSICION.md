@@ -1,8 +1,12 @@
 # Guion de exposición: BioMedManager
 
-Duración estimada: **8 a 10 minutos**, unos 50 segundos por diapositiva. Es una guía para decirlo con tus palabras, no para leerla.
+Duración estimada: **8 a 10 minutos**, más 20 s del anuncio inicial, unos 50 segundos por diapositiva. Es una guía para decirlo con tus palabras, no para leerla.
 
 ---
+
+## 0. Anuncio en video (20 s, se reproduce solo)
+
+> La primera diapositiva es un anuncio de 20 segundos. Déjalo correr sin hablar y, cuando termine, pasa a la portada. Los números de abajo siguen el orden del contenido: en PowerPoint, cada diapositiva aparece un número más adelante.
 
 ## 1. Portada (20 s)
 
