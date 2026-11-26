@@ -61,7 +61,7 @@ function generar(spec) {
   );
 
   // Asociaciones actor - caso de uso.
-  for (const [idActor, idCaso, etiqueta] of spec.asociaciones) {
+  for (const [idActor, idCaso, etiqueta, opciones = {}] of spec.asociaciones) {
     const a = actores[idActor];
     const c = casos[idCaso];
     const ax = a.x + (c.x > a.x ? 22 : -22);
@@ -70,7 +70,7 @@ function generar(spec) {
     partes.push(`<line x1="${ax}" y1="${ay}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="#5A3A26" stroke-width="1.3"/>`);
     if (etiqueta) {
       const mx = (ax + bx) / 2;
-      const my = (ay + by) / 2 - 26;
+      const my = (ay + by) / 2 + (opciones.debajo ? 24 : -26);
       const ancho = Math.max(...etiqueta.map((l) => l.length)) * 6.2 + 10;
       partes.push(
         `<rect x="${(mx - ancho / 2).toFixed(1)}" y="${(my - etiqueta.length * 8 - 1).toFixed(1)}" width="${ancho.toFixed(1)}" height="${etiqueta.length * 14 + 3}" rx="3" fill="#FFFDFB"/>`,
@@ -187,93 +187,48 @@ function conflictos(spec) {
 }
 
 const ACTORES = (yResp, xAuth) => [
-  { id: "vis", x: 95, y: 175, nombre: ["Visitante"] },
+  { id: "vis", x: 95, y: 190, nombre: ["Visitante"] },
   { id: "tec", x: 95, y: yResp, nombre: ["Responsable", "técnico"] },
-  { id: "auth", x: xAuth, y: 215, nombre: ["Supabase Auth", "(servicio de correo)", "«sistema»"] },
+  { id: "auth", x: xAuth, y: 250, nombre: ["Supabase Auth", "(servicio de correo)", "«sistema»"] },
 ];
 
 // ---------------------------------------------------------------------
-// Diagrama 1: lo implementado hoy.
+// Diagrama de casos de uso (funcionalidades implementadas).
 // ---------------------------------------------------------------------
-const actual = colocar({
-  titulo: "uc Casos de uso (implementado)",
-  tituloAccesible: "BioMedManager - casos de uso implementados",
-  ancho: 1240,
-  alto: 900,
-  radio: 430,
-  limite: { x: 230, y: 55, w: 830, h: 730 },
-  actores: ACTORES(500, 1140),
+const diagrama = colocar({
+  titulo: "uc Casos de uso — BioMedManager",
+  tituloAccesible: "BioMedManager - diagrama de casos de uso",
+  ancho: 1320,
+  alto: 1300,
+  radio: 600,
+  limite: { x: 230, y: 55, w: 900, h: 1130 },
+  actores: ACTORES(745, 1225),
   casos: [
     { id: "reg", col: "A", fijoX: 440, y: 120, etiqueta: "Registrarse" },
-    { id: "conf", col: "A", fijoX: 440, y: 192, etiqueta: "Confirmar correo\nelectrónico" },
-    { id: "ini", col: "A", y: 275, etiqueta: "Iniciar sesión" },
-    { id: "cer", col: "A", y: 350, etiqueta: "Cerrar sesión" },
-    { id: "pan", col: "A", y: 425, etiqueta: "Consultar panel\nde resumen" },
-    { id: "inv", col: "A", y: 500, etiqueta: "Consultar\ninventario" },
-    { id: "alta", col: "A", y: 575, etiqueta: "Registrar equipo" },
-    { id: "ficha", col: "A", y: 650, etiqueta: "Consultar ficha\ndel equipo" },
-    { id: "hist", col: "B", base: "ficha", y: 650, etiqueta: "Consultar historial\nde reportes" },
-    { id: "rep", col: "A", y: 725, etiqueta: "Reportar falla\nu observación" },
+    { id: "conf", col: "A", fijoX: 440, y: 190, etiqueta: "Confirmar correo\nelectrónico" },
+    { id: "rec", col: "A", fijoX: 440, y: 260, etiqueta: "Recuperar\ncontraseña" },
+    { id: "ini", col: "A", y: 350, etiqueta: "Iniciar sesión" },
+    { id: "cer", col: "A", y: 420, etiqueta: "Cerrar sesión" },
+    { id: "pan", col: "A", y: 490, etiqueta: "Consultar panel\nde indicadores" },
+    { id: "inv", col: "A", y: 575, etiqueta: "Consultar\ninventario" },
+    { id: "fil", col: "B", base: "inv", y: 530, etiqueta: "Buscar y filtrar\nequipos" },
+    { id: "xls", col: "B", base: "inv", y: 620, etiqueta: "Exportar inventario\na Excel" },
+    { id: "alta", col: "A", y: 665, etiqueta: "Registrar equipo" },
+    { id: "edit", col: "A", y: 735, etiqueta: "Editar datos\ndel equipo" },
+    { id: "ficha", col: "A", y: 830, etiqueta: "Consultar ficha\ndel equipo" },
+    { id: "hist", col: "B", base: "ficha", y: 760, etiqueta: "Consultar historial\nde reportes" },
+    { id: "traz", col: "B", base: "ficha", y: 830, etiqueta: "Consultar trazabilidad\nde estados" },
+    { id: "qr", col: "B", base: "ficha", y: 900, etiqueta: "Generar etiqueta QR" },
+    { id: "est", col: "A", y: 940, etiqueta: "Cambiar estado\ndel equipo" },
+    { id: "ver", col: "B", base: "est", y: 975, etiqueta: "Verificar fallas\npendientes" },
+    { id: "rep", col: "A", y: 1035, etiqueta: "Reportar falla\nu observación" },
+    { id: "mcf", col: "B", base: "rep", y: 1060, etiqueta: "Marcar equipo\n«Con falla»" },
+    { id: "res", col: "A", y: 1130, etiqueta: "Resolver reporte\ncon nota de cierre" },
   ],
   asociaciones: [
     ["vis", "reg"],
     ["vis", "conf"],
-    ["tec", "ini"],
-    ["tec", "cer"],
-    ["tec", "pan"],
-    ["tec", "inv"],
-    ["tec", "alta"],
-    ["tec", "ficha"],
-    ["tec", "rep"],
-    ["auth", "reg", ["envía correo", "de confirmación"]],
-    ["auth", "ini", ["valida", "credenciales"]],
-  ],
-  relaciones: [{ tipo: "include", desde: "ficha", hacia: "hist" }],
-  nota: {
-    x: 230,
-    y: 805,
-    w: 830,
-    lineas: [
-      "Los casos del Responsable técnico requieren sesión iniciada.",
-      "Cada cuenta accede solo a su propio inventario (RLS de PostgreSQL).",
-    ],
-  },
-});
-
-// ---------------------------------------------------------------------
-// Diagrama 2: MVP final (usar solo cuando todo este implementado).
-// ---------------------------------------------------------------------
-const mvp = colocar({
-  titulo: "uc Casos de uso (MVP final)",
-  tituloAccesible: "BioMedManager - casos de uso del MVP final",
-  ancho: 1240,
-  alto: 1200,
-  radio: 520,
-  limite: { x: 230, y: 55, w: 830, h: 1030 },
-  actores: ACTORES(640, 1140),
-  casos: [
-    { id: "reg", col: "A", fijoX: 440, y: 120, etiqueta: "Registrarse" },
-    { id: "conf", col: "A", fijoX: 440, y: 192, etiqueta: "Confirmar correo\nelectrónico" },
-    { id: "ini", col: "A", y: 275, etiqueta: "Iniciar sesión" },
-    { id: "cer", col: "A", y: 345, etiqueta: "Cerrar sesión" },
-    { id: "pan", col: "A", y: 415, etiqueta: "Consultar panel\nde indicadores" },
-    { id: "inv", col: "A", y: 500, etiqueta: "Consultar\ninventario" },
-    { id: "fil", col: "B", base: "inv", y: 455, etiqueta: "Buscar y filtrar\nequipos" },
-    { id: "xls", col: "B", base: "inv", y: 545, etiqueta: "Exportar inventario\na Excel" },
-    { id: "alta", col: "A", y: 590, etiqueta: "Registrar equipo" },
-    { id: "edit", col: "A", y: 660, etiqueta: "Editar datos\ndel equipo" },
-    { id: "ficha", col: "A", y: 745, etiqueta: "Consultar ficha\ndel equipo" },
-    { id: "hist", col: "B", base: "ficha", y: 700, etiqueta: "Consultar historial\nde reportes" },
-    { id: "qr", col: "B", base: "ficha", y: 790, etiqueta: "Generar etiqueta QR" },
-    { id: "est", col: "A", y: 840, etiqueta: "Cambiar estado\ndel equipo" },
-    { id: "ver", col: "B", base: "est", y: 875, etiqueta: "Verificar fallas\npendientes" },
-    { id: "rep", col: "A", y: 930, etiqueta: "Reportar falla\nu observación" },
-    { id: "mcf", col: "B", base: "rep", y: 970, etiqueta: "Marcar equipo\n«Con falla»" },
-    { id: "res", col: "A", y: 1030, etiqueta: "Resolver reporte\ncon nota de cierre" },
-  ],
-  asociaciones: [
-    ["vis", "reg"],
-    ["vis", "conf"],
+    ["vis", "rec"],
     ["tec", "ini"],
     ["tec", "cer"],
     ["tec", "pan"],
@@ -285,36 +240,34 @@ const mvp = colocar({
     ["tec", "rep"],
     ["tec", "res"],
     ["auth", "reg", ["envía correo", "de confirmación"]],
-    ["auth", "ini", ["valida", "credenciales"]],
+    ["auth", "rec", ["envía enlace", "de recuperación"]],
+    ["auth", "ini", ["valida", "credenciales"], { debajo: true }],
   ],
   relaciones: [
     { tipo: "extend", desde: "fil", hacia: "inv" },
     { tipo: "extend", desde: "xls", hacia: "inv" },
     { tipo: "include", desde: "ficha", hacia: "hist" },
+    { tipo: "include", desde: "ficha", hacia: "traz" },
     { tipo: "extend", desde: "qr", hacia: "ficha" },
     { tipo: "include", desde: "est", hacia: "ver" },
     { tipo: "extend", desde: "mcf", hacia: "rep", condicion: "{si el tipo es Falla}", debajo: true },
   ],
   nota: {
     x: 230,
-    y: 1105,
-    w: 830,
+    y: 1205,
+    w: 900,
     lineas: [
-      "Regla de salud: un equipo con fallas pendientes no puede pasar a «Operativo».",
-      "Se impone en PostgreSQL (trigger y permisos), no solo en la interfaz.",
+      "Regla de salud: un equipo con fallas pendientes no puede pasar a «Operativo». Se impone en PostgreSQL",
+      "(trigger y permisos), no solo en la interfaz. Cada cambio de estado queda registrado (trazabilidad).",
     ],
   },
 });
 
-let hayErrores = false;
-for (const [nombre, spec] of [["casos_de_uso_actual", actual], ["casos_de_uso_mvp", mvp]]) {
-  const errores = conflictos(spec);
-  if (errores.length) {
-    hayErrores = true;
-    console.warn(`[${nombre}] lineas que cruzan casos de uso:`, errores.join("; "));
-  }
-  const ruta = join(AQUI, `${nombre}.svg`);
-  writeFileSync(ruta, generar(spec), "utf8");
-  console.log("Generado:", ruta);
+const errores = conflictos(diagrama);
+if (errores.length) {
+  console.warn("Lineas que cruzan casos de uso:", errores.join("; "));
+  process.exitCode = 1;
 }
-if (hayErrores) process.exitCode = 1;
+const ruta = join(AQUI, "casos_de_uso.svg");
+writeFileSync(ruta, generar(diagrama), "utf8");
+console.log("Generado:", ruta);

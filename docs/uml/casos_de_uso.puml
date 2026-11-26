@@ -1,0 +1,75 @@
+@startuml casos_de_uso
+' BioMedManager - Diagrama de casos de uso (funcionalidades implementadas
+' y verificadas al 2026-11-25). Version visual: casos_de_uso.svg / .png,
+' generada con: node docs/uml/generar_svg.mjs
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam usecase {
+  BackgroundColor #FCE3CC
+  BorderColor #8A5A3B
+}
+skinparam actorBorderColor #8A5A3B
+skinparam packageStyle rectangle
+
+actor "Visitante" as Visitante
+actor "Responsable\ntécnico" as Tecnico
+actor "Supabase Auth\n(servicio de correo)" as Auth <<sistema>>
+
+rectangle "BioMedManager" {
+  usecase "Registrarse" as UC1
+  usecase "Confirmar correo\nelectrónico" as UC2
+  usecase "Recuperar\ncontraseña" as UC3
+  usecase "Iniciar sesión" as UC4
+  usecase "Cerrar sesión" as UC5
+  usecase "Consultar panel\nde indicadores" as UC6
+  usecase "Consultar\ninventario" as UC7
+  usecase "Buscar y filtrar\nequipos" as UC8
+  usecase "Exportar inventario\na Excel" as UC9
+  usecase "Registrar equipo" as UC10
+  usecase "Editar datos\ndel equipo" as UC11
+  usecase "Consultar ficha\ndel equipo" as UC12
+  usecase "Consultar historial\nde reportes" as UC13
+  usecase "Consultar trazabilidad\nde estados" as UC14
+  usecase "Generar etiqueta QR" as UC15
+  usecase "Cambiar estado\ndel equipo" as UC16
+  usecase "Verificar fallas\npendientes" as UC17
+  usecase "Reportar falla\nu observación" as UC18
+  usecase "Marcar equipo\n«Con falla»" as UC19
+  usecase "Resolver reporte\ncon nota de cierre" as UC20
+}
+
+Visitante --> UC1
+Visitante --> UC2
+Visitante --> UC3
+Tecnico --> UC4
+Tecnico --> UC5
+Tecnico --> UC6
+Tecnico --> UC7
+Tecnico --> UC10
+Tecnico --> UC11
+Tecnico --> UC12
+Tecnico --> UC16
+Tecnico --> UC18
+Tecnico --> UC20
+
+UC1 --> Auth : envía correo\nde confirmación
+UC3 --> Auth : envía enlace\nde recuperación
+UC4 --> Auth : valida\ncredenciales
+
+UC8 .> UC7 : <<extend>>
+UC9 .> UC7 : <<extend>>
+UC12 ..> UC13 : <<include>>
+UC12 ..> UC14 : <<include>>
+UC15 .> UC12 : <<extend>>
+UC16 ..> UC17 : <<include>>
+UC19 .> UC18 : <<extend>>\n{si el tipo es Falla}
+
+note bottom of UC17
+  Regla de salud: un equipo con fallas pendientes
+  no puede pasar a «Operativo». Se impone en
+  PostgreSQL (trigger y permisos), no solo en la UI.
+  Cada cambio de estado queda registrado (trazabilidad).
+end note
+@enduml

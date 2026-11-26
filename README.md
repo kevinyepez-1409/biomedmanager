@@ -9,13 +9,15 @@ Aplicación web para llevar el **inventario de equipos biomédicos** y el **cicl
 
 ## Funcionalidades
 
-- **Registro e inicio de sesión** con confirmación de correo (Supabase Auth). Cada cuenta tiene su propio inventario.
-- **Panel de indicadores:** disponibilidad (% de equipos operativos), fallas pendientes, equipos fuera de servicio y **MTTR** (tiempo medio de reparación).
+- **Registro e inicio de sesión** con confirmación de correo y **recuperación de contraseña** (Supabase Auth). Cada cuenta tiene su propio inventario.
+- **Panel de indicadores:** disponibilidad (% de equipos operativos), fallas pendientes, equipos fuera de servicio y **MTTR** (tiempo medio de reparación), con gráficos de la distribución por estado y de las fallas por mes.
 - **Inventario** con búsqueda, filtro por estado, alta de equipos y lista de equipos que requieren atención.
 - **Ficha del equipo:** edición de datos, cambio de estado, reportes de falla u observación, resolución con nota de cierre e historial con tiempos.
 - **Regla de salud:** al reportar una falla, el equipo pasa a «Con falla» y **no puede volver a «Operativo» mientras tenga fallas pendientes**. La regla se impone en PostgreSQL (triggers y permisos), no solo en la interfaz.
-- **Exportar a Excel:** un archivo con tres hojas (Resumen, Inventario y Reportes).
-- **Etiqueta QR** imprimible por equipo: al escanearla se abre su ficha.
+- **Trazabilidad:** cada cambio de estado (alta, falla reportada, cambio manual) queda registrado con fecha. Lo escribe solo la base de datos y no se puede editar.
+- **Exportar a Excel:** un archivo con cuatro hojas (Resumen, Inventario, Reportes y Cambios de estado).
+- **Etiqueta QR** imprimible por equipo: al escanearla se abre su ficha; si no hay sesión, después del login vuelve a ese equipo.
+- **Instalable en el celular (PWA):** «Agregar a la pantalla de inicio» la abre como una app.
 
 ## Arquitectura
 
@@ -55,7 +57,8 @@ formulario → validación en la UI → API de Supabase → RLS → trigger → 
 2. Crea un proyecto en Supabase. En **SQL Editor**, ejecuta en este orden:
    1. `supabase/sql/000_esquema_actual.sql`: tablas, índices, permisos y RLS.
    2. `supabase/sql/001_regla_fallas.sql`: regla de fallas.
-   3. `supabase/sql/900_pruebas_regla.sql` (opcional): pruebas automáticas. Necesitan al menos una cuenta registrada; con dos cuentas también se comprueba el aislamiento entre ellas.
+   3. `supabase/sql/002_historial_estados.sql`: trazabilidad de estados.
+   4. Opcional: `900_pruebas_regla.sql` y `901_pruebas_historial.sql`, las pruebas automáticas. Necesitan al menos una cuenta registrada; con dos cuentas también se comprueba el aislamiento entre ellas. Los resultados obtenidos están en `docs/pruebas/RESULTADOS_PRUEBAS_SQL.md`.
 
 3. En **Authentication → URL Configuration**, configura la **Site URL** (`http://localhost:3000` en local) y agrega `http://localhost:3000/**` en **Redirect URLs**.
 
@@ -83,6 +86,7 @@ npm audit --omit=dev
 | --- | --- |
 | `equipos` | `codigo` (único por cuenta, sin distinguir mayúsculas), `nombre`, `marca`, `modelo`, `ubicacion`, `estado` (Operativo / Con falla / Mantenimiento), `usuario_id`, `creado_en` |
 | `reportes` | `equipo_id`, `tipo` (Falla / Observación), `descripcion` (5-2000 caracteres), `estado_atencion` (Pendiente / Resuelto), `nota_cierre`, `resuelto_en`, `usuario_id`, `creado_en` |
+| `historial_estados` | `equipo_id`, `estado_anterior`, `estado_nuevo`, `origen` (alta / falla reportada / cambio manual), `usuario_id`, `creado_en`; solo lectura desde la API |
 
 Los scripts de `supabase/sql/` son la fuente de verdad del esquema.
 
@@ -102,7 +106,6 @@ docs/                  plan técnico, casos de uso (PlantUML/SVG/PNG) y pruebas 
 
 - Cada cuenta es un inventario individual: no hay inventario compartido ni roles (trabajo futuro).
 - No se pueden borrar equipos ni reportes: así se conserva el historial.
-- No hay recuperación de contraseña desde la app.
 - Los correos de confirmación salen por un SMTP de Gmail con contraseña de aplicación: es suficiente para pruebas, pero no para envíos masivos. Sin SMTP propio, Supabase solo envía a los miembros del equipo del proyecto.
 - La plantilla «Confirm signup» de Supabase debe apuntar a `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email`. Así el enlace funciona aunque se abra en otro dispositivo.
 - En correos institucionales, el filtro de seguridad puede abrir el enlace de confirmación antes que la persona. En ese caso basta con iniciar sesión.

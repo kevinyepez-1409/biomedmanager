@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1300" viewBox="0 0 1320 1300" font-family="Arial, Helvetica, sans-serif">
+<title>BioMedManager - diagrama de casos de uso</title>
+<defs>
+  <linearGradient id="relleno" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#FFF3E8"/>
+    <stop offset="1" stop-color="#F6C9A1"/>
+  </linearGradient>
+  <marker id="flecha" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto-start-reverse">
+    <path d="M1 1 L11 6 L1 11" fill="none" stroke="#3B2A1E" stroke-width="1.6"/>
+  </marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<rect x="8" y="8" width="1304" height="1284" fill="#FFFFFF" stroke="#5A3A26" stroke-width="1.2"/>
+<path d="M8 8 H260 V26 L248 38 H8 Z" fill="#F4EDE7" stroke="#5A3A26" stroke-width="1.2"/>
+<text x="18" y="27.6" font-size="13" font-weight="700" text-anchor="start" fill="#2B2118">uc Casos de uso — BioMedManager</text>
+<rect x="230" y="55" width="900" height="1130" rx="6" fill="#FFFDFB" stroke="#8A7A6E" stroke-width="1.4"/>
+<text x="680" y="82.3" font-size="15" font-weight="700" text-anchor="middle" fill="#2B2118">BioMedManager</text>
+<line x1="117" y1="180" x2="358.7" y2="135.1" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="180" x2="342.6" y2="187.0" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="180" x2="367.1" y2="241.9" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="518.2" y2="375.8" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="560.9" y2="444.9" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="588.5" y2="513.3" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="602.4" y2="594.6" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="600.4" y2="675.9" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="597.0" y2="735.0" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="605.1" y2="816.1" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="604.1" y2="918.2" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="578.9" y2="1010.5" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="117" y1="735" x2="526.4" y2="1104.2" stroke="#5A3A26" stroke-width="1.3"/>
+<line x1="1203" y1="240" x2="525.1" y2="133.4" stroke="#5A3A26" stroke-width="1.3"/>
+<rect x="812.6" y="143.7" width="103.0" height="31" rx="3" fill="#FFFDFB"/>
+<text x="864.0545877150646" y="157.9" font-size="11" font-weight="400" text-anchor="middle" fill="#5A3A26">envía correo</text><text x="864.0545877150646" y="171.1" font-size="11" font-weight="400" text-anchor="middle" fill="#5A3A26">de confirmación</text>
+<line x1="1203" y1="240" x2="537.6" y2="257.4" stroke="#5A3A26" stroke-width="1.3"/>
+<rect x="818.8" y="205.7" width="103.0" height="31" rx="3" fill="#FFFDFB"/>
+<text x="870.2797248930499" y="220.0" font-size="11" font-weight="400" text-anchor="middle" fill="#5A3A26">envía enlace</text><text x="870.2797248930499" y="233.2" font-size="11" font-weight="400" text-anchor="middle" fill="#5A3A26">de recuperación</text>
+<line x1="1203" y1="240" x2="630.7" y2="336.0" stroke="#5A3A26" stroke-width="1.3"/>
+<rect x="874.7" y="295.0" width="84.4" height="31" rx="3" fill="#FFFDFB"/>
+<text x="916.8570069305215" y="309.2" font-size="11" font-weight="400" text-anchor="middle" fill="#5A3A26">valida</text><text x="916.8570069305215" y="322.4" font-size="11" font-weight="400" text-anchor="middle" fill="#5A3A26">credenciales</text>
+<ellipse cx="440" cy="120" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="440" y="124.5" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Registrarse</text>
+<ellipse cx="440" cy="190" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="440" y="186.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Confirmar correo</text><text x="440" y="202.3" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">electrónico</text>
+<ellipse cx="440" cy="260" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="440" y="256.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Recuperar</text><text x="440" y="272.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">contraseña</text>
+<ellipse cx="547" cy="350" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="547" y="354.6" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Iniciar sesión</text>
+<ellipse cx="599" cy="420" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="599" y="424.6" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Cerrar sesión</text>
+<ellipse cx="638" cy="490" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="638" y="486.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Consultar panel</text><text x="638" y="502.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">de indicadores</text>
+<ellipse cx="670" cy="575" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="670" y="571.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Consultar</text><text x="670" y="587.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">inventario</text>
+<ellipse cx="975" cy="530" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="975" y="526.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Buscar y filtrar</text><text x="975" y="542.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">equipos</text>
+<ellipse cx="975" cy="620" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="975" y="616.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Exportar inventario</text><text x="975" y="632.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">a Excel</text>
+<ellipse cx="690" cy="665" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="690" y="669.5" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Registrar equipo</text>
+<ellipse cx="695" cy="735" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="695" y="731.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Editar datos</text><text x="695" y="747.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">del equipo</text>
+<ellipse cx="689" cy="830" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="689" y="826.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Consultar ficha</text><text x="689" y="842.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">del equipo</text>
+<ellipse cx="994" cy="760" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="994" y="756.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Consultar historial</text><text x="994" y="772.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">de reportes</text>
+<ellipse cx="994" cy="830" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="994" y="826.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Consultar trazabilidad</text><text x="994" y="842.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">de estados</text>
+<ellipse cx="994" cy="900" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="994" y="904.5" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Generar etiqueta QR</text>
+<ellipse cx="662" cy="940" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="662" y="936.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Cambiar estado</text><text x="662" y="952.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">del equipo</text>
+<ellipse cx="967" cy="975" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="967" y="971.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Verificar fallas</text><text x="967" y="987.4" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">pendientes</text>
+<ellipse cx="620" cy="1035" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="620" y="1031.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Reportar falla</text><text x="620" y="1047.3" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">u observación</text>
+<ellipse cx="925" cy="1060" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="925" y="1056.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Marcar equipo</text><text x="925" y="1072.3" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">«Con falla»</text>
+<ellipse cx="555" cy="1130" rx="98" ry="27" fill="url(#relleno)" stroke="#8A5A3B" stroke-width="1.5"/>
+<text x="555" y="1126.8" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">Resolver reporte</text><text x="555" y="1142.3" font-size="13" font-weight="400" text-anchor="middle" fill="#2B2118">con nota de cierre</text>
+<line x1="888.6" y1="542.7" x2="756.4" y2="562.3" stroke="#3B2A1E" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#flecha)"/>
+<text x="833.0772713244802" y="538.8" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">«extend»</text>
+<line x1="888.6" y1="607.3" x2="756.4" y2="587.7" stroke="#3B2A1E" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#flecha)"/>
+<text x="833.0772713244802" y="586.9" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">«extend»</text>
+<line x1="764.3" y1="812.7" x2="918.7" y2="777.3" stroke="#3B2A1E" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#flecha)"/>
+<text x="829.1475081968769" y="785.7" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">«include»</text>
+<line x1="787.0" y1="830.0" x2="896.0" y2="830.0" stroke="#3B2A1E" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#flecha)"/>
+<text x="832.78" y="817.9" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">«include»</text>
+<line x1="918.7" y1="882.7" x2="764.3" y2="847.3" stroke="#3B2A1E" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#flecha)"/>
+<text x="853.8524918031231" y="855.7" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">«extend»</text>
+<line x1="752.5" y1="950.4" x2="876.5" y2="964.6" stroke="#3B2A1E" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#flecha)"/>
+<text x="804.5746260753511" y="944.2" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">«include»</text>
+<line x1="831.1" y1="1052.3" x2="713.9" y2="1042.7" stroke="#3B2A1E" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#flecha)"/>
+<text x="781.8710259830198" y="1075.5" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">«extend»</text><text x="781.8710259830198" y="1088.7" font-size="11" font-weight="400" text-anchor="middle" fill="#3B2A1E">{si el tipo es Falla}</text>
+<g stroke="#5A3A26" stroke-width="2" fill="none">
+    <circle cx="95" cy="152" r="11" fill="#FCE3CC"/>
+    <line x1="95" y1="163" x2="95" y2="195"/>
+    <line x1="77" y1="174" x2="113" y2="174"/>
+    <line x1="95" y1="195" x2="80" y2="220"/>
+    <line x1="95" y1="195" x2="110" y2="220"/>
+  </g><text x="95" y="244.6" font-size="13" font-weight="700" text-anchor="middle" fill="#2B2118">Visitante</text>
+<g stroke="#5A3A26" stroke-width="2" fill="none">
+    <circle cx="95" cy="707" r="11" fill="#FCE3CC"/>
+    <line x1="95" y1="718" x2="95" y2="750"/>
+    <line x1="77" y1="729" x2="113" y2="729"/>
+    <line x1="95" y1="750" x2="80" y2="775"/>
+    <line x1="95" y1="750" x2="110" y2="775"/>
+  </g><text x="95" y="799.8" font-size="13" font-weight="700" text-anchor="middle" fill="#2B2118">Responsable</text><text x="95" y="815.4" font-size="13" font-weight="700" text-anchor="middle" fill="#2B2118">técnico</text>
+<g stroke="#5A3A26" stroke-width="2" fill="none">
+    <circle cx="1225" cy="212" r="11" fill="#FCE3CC"/>
+    <line x1="1225" y1="223" x2="1225" y2="255"/>
+    <line x1="1207" y1="234" x2="1243" y2="234"/>
+    <line x1="1225" y1="255" x2="1210" y2="280"/>
+    <line x1="1225" y1="255" x2="1240" y2="280"/>
+  </g><text x="1225" y="304.9" font-size="13" font-weight="700" text-anchor="middle" fill="#2B2118">Supabase Auth</text><text x="1225" y="320.6" font-size="13" font-weight="700" text-anchor="middle" fill="#2B2118">(servicio de correo)</text><text x="1225" y="336.1" font-size="13" font-weight="700" text-anchor="middle" fill="#2B2118">«sistema»</text>
+<path d="M230 1205 H1116 L1130 1219 V1255 H230 Z" fill="#FFF8D9" stroke="#8A7A6E" stroke-width="1.2"/>
+<path d="M1116 1205 V1219 H1130" fill="none" stroke="#8A7A6E" stroke-width="1.2"/>
+<text x="244" y="1227.0" font-size="12" font-weight="400" text-anchor="start" fill="#2B2118">Regla de salud: un equipo con fallas pendientes no puede pasar a «Operativo». Se impone en PostgreSQL</text><text x="244" y="1241.4" font-size="12" font-weight="400" text-anchor="start" fill="#2B2118">(trigger y permisos), no solo en la interfaz. Cada cambio de estado queda registrado (trazabilidad).</text>
+</svg>
