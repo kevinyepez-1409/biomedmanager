@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" font-family="Arial, Helvetica, sans-serif">
+  <title>BioMedManager - arquitectura de software y flujo de datos</title>
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="560" fill="#ffffff"/>
+
+  <!-- Cliente -->
+  <rect x="20" y="40" width="210" height="300" rx="16" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="125" y="72" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">Usuario</text>
+  <rect x="45" y="95" width="160" height="70" rx="10" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="125" y="126" text-anchor="middle" font-size="15" fill="#0f172a">Navegador</text>
+  <text x="125" y="146" text-anchor="middle" font-size="12" fill="#64748b">PC o celular</text>
+  <rect x="45" y="180" width="160" height="70" rx="10" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="125" y="211" text-anchor="middle" font-size="15" fill="#0f172a">App instalada</text>
+  <text x="125" y="231" text-anchor="middle" font-size="12" fill="#64748b">PWA (pantalla de inicio)</text>
+  <rect x="45" y="265" width="160" height="55" rx="10" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="125" y="290" text-anchor="middle" font-size="15" fill="#0f172a">Etiqueta QR</text>
+  <text x="125" y="308" text-anchor="middle" font-size="12" fill="#64748b">abre la ficha</text>
+
+  <!-- Vercel / Next.js -->
+  <rect x="290" y="40" width="300" height="300" rx="16" fill="#ecf8f8" stroke="#1f888e" stroke-width="1.5"/>
+  <text x="440" y="72" text-anchor="middle" font-size="17" font-weight="700" fill="#0c3a40">Vercel · Next.js 16</text>
+  <text x="440" y="92" text-anchor="middle" font-size="12" fill="#12575e">React 19 · TypeScript · Tailwind CSS</text>
+  <rect x="315" y="110" width="250" height="62" rx="10" fill="#ffffff" stroke="#3aa4a9"/>
+  <text x="440" y="137" text-anchor="middle" font-size="14" fill="#0f172a">Páginas (componentes cliente)</text>
+  <text x="440" y="157" text-anchor="middle" font-size="12" fill="#64748b">panel · ficha · registro · QR · Excel</text>
+  <rect x="315" y="185" width="250" height="62" rx="10" fill="#ffffff" stroke="#3aa4a9"/>
+  <text x="440" y="212" text-anchor="middle" font-size="14" fill="#0f172a">proxy.ts</text>
+  <text x="440" y="232" text-anchor="middle" font-size="12" fill="#64748b">sesión y protección de rutas</text>
+  <rect x="315" y="260" width="250" height="62" rx="10" fill="#ffffff" stroke="#3aa4a9"/>
+  <text x="440" y="287" text-anchor="middle" font-size="14" fill="#0f172a">/auth/confirm</text>
+  <text x="440" y="307" text-anchor="middle" font-size="12" fill="#64748b">enlaces de correo (token_hash)</text>
+
+  <!-- Supabase -->
+  <rect x="650" y="40" width="530" height="300" rx="16" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="915" y="72" text-anchor="middle" font-size="17" font-weight="700" fill="#14532d">Supabase (backend administrado)</text>
+  <rect x="675" y="95" width="200" height="105" rx="10" fill="#ffffff" stroke="#4ade80"/>
+  <text x="775" y="125" text-anchor="middle" font-size="15" fill="#0f172a">Supabase Auth</text>
+  <text x="775" y="147" text-anchor="middle" font-size="12" fill="#64748b">registro · login</text>
+  <text x="775" y="165" text-anchor="middle" font-size="12" fill="#64748b">confirmación y recuperación</text>
+  <text x="775" y="183" text-anchor="middle" font-size="12" fill="#64748b">correo vía SMTP (Gmail)</text>
+  <rect x="675" y="220" width="200" height="100" rx="10" fill="#ffffff" stroke="#4ade80"/>
+  <text x="775" y="252" text-anchor="middle" font-size="15" fill="#0f172a">API REST</text>
+  <text x="775" y="274" text-anchor="middle" font-size="12" fill="#64748b">generada por Supabase</text>
+  <text x="775" y="292" text-anchor="middle" font-size="12" fill="#64748b">(supabase-js, HTTPS)</text>
+  <rect x="900" y="95" width="255" height="225" rx="10" fill="#ffffff" stroke="#4ade80"/>
+  <text x="1027" y="125" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">PostgreSQL</text>
+  <text x="920" y="155" font-size="13" fill="#0f172a">• equipos</text>
+  <text x="920" y="177" font-size="13" fill="#0f172a">• reportes</text>
+  <text x="920" y="199" font-size="13" fill="#0f172a">• historial_estados</text>
+  <text x="920" y="231" font-size="13" fill="#14532d">RLS: cada cuenta ve solo lo suyo</text>
+  <text x="920" y="253" font-size="13" fill="#14532d">Triggers: regla de salud</text>
+  <text x="920" y="275" font-size="13" fill="#14532d">y trazabilidad de estados</text>
+  <text x="920" y="297" font-size="13" fill="#14532d">Permisos por columna</text>
+
+  <!-- Conexiones -->
+  <line x1="230" y1="190" x2="288" y2="190" stroke="#475569" stroke-width="2" marker-end="url(#f)"/>
+  <text x="259" y="180" text-anchor="middle" font-size="11" fill="#475569">HTTPS</text>
+  <line x1="590" y1="150" x2="673" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#f)"/>
+  <line x1="590" y1="270" x2="673" y2="270" stroke="#475569" stroke-width="2" marker-end="url(#f)"/>
+  <line x1="875" y1="270" x2="898" y2="270" stroke="#475569" stroke-width="2" marker-end="url(#f)"/>
+
+  <!-- GitHub -->
+  <rect x="290" y="360" width="300" height="40" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="440" y="385" text-anchor="middle" font-size="13" fill="#334155">GitHub → despliegue automático en Vercel</text>
+
+  <!-- Pipeline -->
+  <text x="20" y="450" font-size="16" font-weight="700" fill="#0f172a">Flujo de un reporte de falla</text>
+  <g font-size="13" fill="#0f172a" text-anchor="middle">
+    <rect x="20" y="470" width="120" height="56" rx="10" fill="#ecf8f8" stroke="#3aa4a9"/>
+    <text x="80" y="503">Formulario</text>
+    <rect x="166" y="470" width="120" height="56" rx="10" fill="#ecf8f8" stroke="#3aa4a9"/>
+    <text x="226" y="494">Validación</text><text x="226" y="512">en la interfaz</text>
+    <rect x="312" y="470" width="120" height="56" rx="10" fill="#f0fdf4" stroke="#4ade80"/>
+    <text x="372" y="494">API REST</text><text x="372" y="512">de Supabase</text>
+    <rect x="458" y="470" width="120" height="56" rx="10" fill="#f0fdf4" stroke="#4ade80"/>
+    <text x="518" y="494">RLS</text><text x="518" y="512">¿es su equipo?</text>
+    <rect x="604" y="470" width="120" height="56" rx="10" fill="#f0fdf4" stroke="#4ade80"/>
+    <text x="664" y="494">Triggers</text><text x="664" y="512">«Con falla»</text>
+    <rect x="750" y="470" width="120" height="56" rx="10" fill="#f0fdf4" stroke="#4ade80"/>
+    <text x="810" y="494">Tablas</text><text x="810" y="512">+ historial</text>
+    <rect x="896" y="470" width="120" height="56" rx="10" fill="#ecf8f8" stroke="#3aa4a9"/>
+    <text x="956" y="494">Consulta</text><text x="956" y="512">(RLS)</text>
+    <rect x="1042" y="470" width="138" height="56" rx="10" fill="#ecf8f8" stroke="#3aa4a9"/>
+    <text x="1111" y="494">Panel, ficha</text><text x="1111" y="512">y Excel</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" marker-end="url(#f)">
+    <line x1="140" y1="498" x2="164" y2="498"/>
+    <line x1="286" y1="498" x2="310" y2="498"/>
+    <line x1="432" y1="498" x2="456" y2="498"/>
+    <line x1="578" y1="498" x2="602" y2="498"/>
+    <line x1="724" y1="498" x2="748" y2="498"/>
+    <line x1="870" y1="498" x2="894" y2="498"/>
+    <line x1="1016" y1="498" x2="1040" y2="498"/>
+  </g>
+</svg>
