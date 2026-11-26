@@ -25,6 +25,9 @@ function mensajeDeError(codigo: string | undefined): string {
     case "over_email_send_rate_limit":
     case "over_request_rate_limit":
       return "Se enviaron demasiados correos. Espera unos minutos e inténtalo de nuevo.";
+    case "unexpected_failure":
+      // Normalmente: el servidor de correo (SMTP) rechazo el envio.
+      return "No se pudo enviar el correo de confirmación. Inténtalo más tarde o avisa al responsable de la aplicación.";
     case "signup_disabled":
       return "El registro de cuentas nuevas está desactivado.";
     default:
