@@ -72,9 +72,9 @@ Duración estimada: **8 a 10 minutos**, más 20 s del anuncio inicial, unos 50 s
 
 ## 9. Short Video (20 s)
 
-> Preparé un video de menos de tres minutos que muestra el recorrido completo: registro, reporte de una falla, el bloqueo de la regla, la resolución, los indicadores, el Excel y el QR desde el celular.
+> Preparé dos videos cortos. El primero muestra la app en la computadora: el panel, el reporte de una falla, el bloqueo de la regla, la resolución, los indicadores y el Excel. El segundo muestra cómo se instala en el celular y cómo se usa desde ahí.
 
-*(Si vas a reproducir el video aquí, este es el momento.)*
+*(Si vas a reproducirlos aquí, este es el momento: «App web pc.mp4» y luego «App mobil Celular instalacion.mp4».)*
 
 ## 10. Project on GitHub (30 s)
 
